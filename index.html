@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>💖 З Днем Народження!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Pacifico', cursive;
+        }
+
+        #intro {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: 1s;
+        }
+
+        #startBtn {
+            padding: 20px 40px;
+            font-size: 2em;
+            background: transparent;
+            border: 3px solid white;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 30px;
+        }
+
+        #startBtn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.1);
+        }
+
+        #mainContent {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            display: none;
+        }
+
+        .text-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 2.5em;
+            text-align: center;
+            width: 80%;
+            z-index: 100;
+        }
+
+        .message-box {
+            background: rgba(255,255,255,0.1);
+            padding: 30px 50px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            margin: 20px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hearts-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 34px;
+            animation: heartFloat 5s linear forwards;
+            color: #ff0066;
+            text-shadow: 
+                0 0 10px rgba(255,255,255,0.5),
+                0 0 20px rgba(255,0,102,0.7);
+            filter: drop-shadow(0 0 2px rgba(0,0,0,0.3));
+        }
+
+        @keyframes heartFloat {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="intro">
+        <div class="hearts-container"></div>
+        <h1 class="animate__animated animate__heartBeat">💖 Моя Принцесо 💖</h1>
+        <button id="startBtn">Відкрити Чудо</button>
+    </div>
+
+    <div id="mainContent">
+        <div class="hearts-container"></div>
+        <div class="text-container"></div>
+    </div>
+
+    <!-- Добавляем аудио элемент -->
+    <audio id="music" src="tak-grie.mp3"></audio>
+
+    <script>
+        const messages = [
+            "З Днем Народження! 🎂",
+            "Ти - моє світло 🌟",
+            "Кожен день з тобою - щастя 🏰",
+            "Люблю тебе більше за все ✨"
+        ];
+
+        document.getElementById('startBtn').addEventListener('click', () => {
+            // Переход между экранами
+            document.getElementById('intro').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('intro').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+            }, 1000);
+
+            // Запуск музыки
+            const music = document.getElementById('music');
+            music.volume = 0.5;
+            music.play().catch(error => {
+                console.log('Автовоспроизведение заблокировано, нажмите кнопку еще раз');
+            });
+
+            // Запуск сердец
+            createHearts();
+            
+            // Запуск сообщений
+            showMessages();
+        });
+
+        function createHearts() {
+            const container = document.querySelector('#mainContent .hearts-container');
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '💖';
+                heart.style.left = Math.random() * 95 + '%';
+                heart.style.animationDuration = 3 + Math.random() * 3 + 's';
+                container.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 5000);
+            }, 300);
+        }
+
+        function showMessages() {
+            let index = 0;
+            const container = document.querySelector('.text-container');
+            
+            setInterval(() => {
+                container.innerHTML = `
+                    <div class="message-box">
+                        ${messages[index]}
+                    </div>
+                `;
+                index = (index + 1) % messages.length;
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
